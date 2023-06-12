@@ -1,15 +1,19 @@
 package com.instagram.view.validation;
 
 /**
+ * <P>
  * Handles the validation of the user details.
+ * </P>
  *
  * @author Arun
  * @version 1.1
  */
-public class UserValidation {
+public class Validation {
 
     /**
+     * <p>
      * Validates the username of the user.
+     * </p>
      *
      * @param userName The username of the user.
      * @return True if username is valid, false otherwise.
@@ -19,7 +23,9 @@ public class UserValidation {
     }
 
     /**
+     * <p>
      * Validates the email of the user.
+     * </p>
      *
      * @param email The email of the user.
      * @return True if email is valid, false otherwise.
@@ -29,7 +35,9 @@ public class UserValidation {
     }
 
     /**
+     * <p>
      * Validates the password of the user.
+     * </p>
      *
      * @param password The password of the user.
      * @return True if password is valid, false otherwise.
@@ -39,7 +47,9 @@ public class UserValidation {
     }
 
     /**
+     * <p>
      * Validates the mobile number of the user.
+     * </p>
      *
      * @param mobileNumber The mobile number of yhe user.
      * @return True if mobile number is valid, false otherwise.
@@ -49,11 +59,13 @@ public class UserValidation {
     }
 
     /**
+     * <p>
      * Goes to main menu of the application.
+     * </p>
      *
      * @param userInput The input of the user details.
      */
-    public boolean isBack(final String userInput) {
+    public boolean backMenu(final String userInput) {
         if (userInput.contains("!")) {
             return true;
         }
@@ -62,10 +74,12 @@ public class UserValidation {
     }
 
     /**
-     * Validates the user for exit
+     * <p>
+     * Validates the user for exit.
+     * </p>
      *
-     * @param exitChoice The exit choice of the user
-     * @return True if exit choice condition is satisfied, false otherwise
+     * @param exitChoice The exit choice of the user.
+     * @return True if exit choice condition is satisfied, false otherwise.
      */
     public boolean isExit(final String exitChoice) {
         return "No".equalsIgnoreCase(exitChoice) || "N".equalsIgnoreCase(exitChoice);

@@ -3,13 +3,14 @@ package com.instagram.view;
 import com.instagram.controller.UserController;
 import com.instagram.model.Post;
 import com.instagram.model.User;
-import com.instagram.view.validation.UserValidation;
+import com.instagram.view.validation.Validation;
 
-import java.util.List;
 import java.util.Scanner;
 
 /**
- * Displays the user option for sign in, signup and features of instagram.
+ * <p>
+ * Displays the user option for sign in, signup and provides methods to render user data on the screen.
+ * </p>
  *
  * @author Arun
  * @version 1.1
@@ -18,17 +19,36 @@ public class UserView {
 
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final UserController USER_CONTROLLER = new UserController();
-    private static final UserValidation USER_VALIDATION = new UserValidation();
-    private static long id = 0l;
+    private static final Validation USER_VALIDATION = new Validation();
+    private static UserView userView = null;
+
+    private UserView(){}
+
+    /**
+     * <p>
+     * Gets a static instance object of the class.
+     * </p>
+     *
+     * @return The user view object.
+     */
+    public static UserView getInstance() {
+        if (userView == null) {
+            userView = new UserView();
+        }
+
+        return userView;
+    }
 
     public static void main(String[] args) {
-        final UserView userView = new UserView();
+        final UserView userView = getInstance();
 
         userView.menu();
     }
 
     /**
+     * <p>
      * Gets the choice for user menu.
+     * </p>
      */
     private void menu() {
         System.out.println("Click 1 To Sign Up \nClick 2 To Sign In \nClick 3 To Exit");
@@ -51,7 +71,9 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Gets the valid username from the user.
+     * </p>
      *
      * @return The valid username of the user.
      */
@@ -67,7 +89,9 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Gets the valid email from the user.
+     * </p>
      *
      * @return The valid email of the user.
      */
@@ -84,7 +108,9 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Gets the valid password from the user.
+     * </p>
      *
      * @return The valid password of the user.
      */
@@ -100,7 +126,9 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Gets the valid mobile number from the user.
+     * </p>
      *
      * @return The mobile number of the user.
      */
@@ -115,7 +143,9 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Gets the valid choice from the user.
+     * </p>
      *
      * @return The choice of the user.
      */
@@ -132,7 +162,9 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Gets the user details of the user.
+     * </p>
      */
     public User getUser() {
         System.out.println("Enter Your UserId:");
@@ -144,31 +176,35 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Gets the all user details.
+     * </p>
      */
     private void getAllUsers() {
         System.out.println(USER_CONTROLLER.getAllUsers());
     }
 
     /**
+     * <p>
      * Users to enter sign up details for sign up process.
+     * </p>
      */
     private void signUp() {
         final User user = new User();
 
-        user.setId(++id);
         user.setName(getName());
         user.setEmail(getEmail());
         user.setPassword(getPassword());
         user.setMobileNumber(getMobileNumber());
+        final long id = USER_CONTROLLER.signUp(user);
 
-        if (USER_CONTROLLER.signUp(user)) {
+        if (0 != id) {
             System.out.println("Sign Up Successfully");
 
             if (exitAccess()) {
                 menu();
             } else {
-                userScreen(user);
+                userScreen(id);
             }
         } else {
             System.out.println("User Already Exists. Please Try Again");
@@ -177,104 +213,114 @@ public class UserView {
     }
 
     /**
-     * Prints the user screen for instagram features
+     * <p>
+     * Prints the features of the application.
+     * </p>
+     *
+     * @param id The id of the user.
      */
-    public void userScreen(final User user) {
+    public void userScreen(final long id) {
         System.out.println(String.join(" ","Click 1 To User Post Menu\nClick 2 To Logout", "\nClick 3",
                 "To Get User\nClick 4 To Get All User \nClick 5 To Update User\nClick 6 To Delete User",
                 "\nClick 7 To Main Menu\nClick 8 To Display"));
-        final PostView postView = new PostView();
+        final PostView postView = PostView.getInstance();
 
         switch (getChoice()) {
             case 1:
-                postView.postMenu(user);
+                postView.menu(id);
                 break;
             case 2:
                 logout();
                 break;
             case 3:
                 getUser();
-                userScreen(user);
                 break;
             case 4:
                 getAllUsers();
-                userScreen(user);
                 break;
             case 5:
-                updateUserDetails();
-                userScreen(user);
+                updateUserDetails(id);
                 break;
             case 6:
                 deleteUserAccount();
-                userScreen(user);
                 break;
             case 7:
                 menu();
                 break;
             case 8:
-                userPostDisplay(user);
+                displayUserPost();
                 break;
             default:
                 System.out.println("Invalid User Choice. Please Try Again\n[Enter The Choice In The Range 1-7]");
-                userScreen(user);
+                userScreen(id);
         }
+        userScreen(id);
     }
 
     /**
-     * Displays the collection of user post
-     *
-     * @param user The user object containing user detail
+     * <p>
+     * Displays the collection of user post.
+     * </p>
      */
-    private void userPostDisplay(final User user) {
-        System.out.println("Enter The User Id To Get List Of Post:");
+    private void displayUserPost() {
+        System.out.println("Enter The User Id To Get Collection Of Post:");
         final long id = Long.parseLong(SCANNER.nextLine());
+        final User user = new User();
 
         for (final Post post : user.getPosts()) {
-            final User userInfo = post.getUser();
 
-            if (userInfo.getId() == id) {
+            if (post.getUserId() == id) {
                 System.out.println(post);
             }
         }
-        userScreen(user);
     }
 
     /**
-     * Users to enter update details.
-     */
-    private void updateUserDetails() {
-        final User user = new User();
-
-        setUpdateDetails(user);
-        System.out.println((USER_CONTROLLER.isValidUpdate(user)) ? "User Account Updated Successfully"
-                : "User Account Not Updated");
-    }
-
-    /**
-     * Sets the details of user to update
+     * <p>
+     * Users to enter update details and shows the status of the process.
+     * </p>
      *
-     * @param user The user object containing user details
+     * @param id The id of the user.
      */
-    private void setUpdateDetails(final User user) {
-        System.out.println("Get The User To Update The User Details");
-        final User userDetail = getUser();
+    private void updateUserDetails(final long id) {
+        final User user = new User();
+        final User userDetail = getUserById(id);
 
         user.setName(exitAccess() ? userDetail.getName() : getName());
         user.setPassword(exitAccess() ? userDetail.getPassword() : getPassword());
         user.setEmail(exitAccess() ? userDetail.getEmail() : getEmail());
+
+        System.out.println((USER_CONTROLLER.updateUser(user)) ? "User Account Updated Successfully"
+                : "User Account Not Updated");
     }
 
     /**
+     * <p>
+     * Gets user detail information by id of the user.
+     * </p>
+     *
+     * @param id The id of the user.
+     * @return The information of the user.
+     */
+    private User getUserById(final long id) {
+        return USER_CONTROLLER.getUserById(id);
+    }
+
+    /**
+     * <p>
      * Users to delete his account.
+     * </p>
      */
     private void deleteUserAccount() {
-        System.out.println("Enter Your User Email:");
-        System.out.println((USER_CONTROLLER.deleteUserAccount(SCANNER.nextLine())) ? "User Account Deleted Successfully"
-                : "User Not Found. Please Try Again");
+        System.out.println("Enter Your User Id:");
+        System.out.println(USER_CONTROLLER.deleteUserAccount(Long.parseLong(SCANNER.nextLine())) ?
+                "User Account Deleted Successfully" : "User Not Found. Please Try Again");
     }
 
     /**
+     * <p>
      * Users to log out the page.
+     * </p>
      */
     private void logout() {
         System.out.println("Logged Out Successfully");
@@ -286,17 +332,20 @@ public class UserView {
     }
 
     /**
-     * Users to enter sign in details and calls the controller to sign in the user.
+     * <p>
+     * Users to enter sign in details to sign in process.
+     * </p>
      */
     private void signIn() {
         final User user = new User();
 
         userChoice(user);
         user.setPassword(getPassword());
+        final long id = USER_CONTROLLER.signIn(user);
 
-        if (USER_CONTROLLER.signIn(user)) {
+        if (0 != id) {
             System.out.println("Sign in successfully");
-            userScreen(user);
+            userScreen(id);
         } else {
             System.out.println("User Not Found. Please Try Again");
             menu();
@@ -304,7 +353,9 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Gets the user choice for sign in with email or mobile number.
+     * </p>
      *
      * @param user The user object containing user details.
      */
@@ -326,18 +377,22 @@ public class UserView {
     }
 
     /**
-     * Exits the screen to menu
+     * <p>
+     * Exits the screen to menu.
+     * </p>
      *
      * @param userChoice The user choice for the exit
      */
     private void exitBack(final String userChoice) {
-        if (USER_VALIDATION.isBack(userChoice)) {
+        if (USER_VALIDATION.backMenu(userChoice)) {
             menu();
         }
     }
 
-    /**\
-     * Checks the process to continue or exit
+    /**
+     * <p>
+     * Checks the process to continue or exit.
+     * </p>
      *
      * @return True if exit the process, false otherwise
      */
@@ -349,7 +404,9 @@ public class UserView {
     }
 
     /**
+     * <p>
      * Exits the user from the application.
+     * </p>
      */
     private void exit() {
         System.out.println("Exiting");
