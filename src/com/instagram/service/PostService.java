@@ -5,7 +5,9 @@ import com.instagram.model.Post;
 import java.util.Collection;
 
 /**
- * Provides post service for the user
+ * <p>
+ * Provides post service for the user.
+ * </p>
  *
  * @author Arun
  * @version 1.1
@@ -13,40 +15,50 @@ import java.util.Collection;
 public interface PostService {
 
     /**
+     * <p>
      * Creates the user post.
+     * </p>
      *
-     * @param post   The post detail of the user
+     * @param post The post detail of the user.
      */
     boolean createPost(final Post post);
 
     /**
-     * Gets the all post of the user
+     * <p>
+     * Gets the all post of the user.
+     * </p>
      *
-     * @return The collection of post
+     * @return The collection of post.
      */
     Collection<Post> getAllPost();
 
     /**
-     * Gets the post detail of the user
+     * <p>
+     * Gets the post detail of the user.
+     * </p>
      *
-     * @param id The post id of the user
-     * @return The post details of the user
+     * @param id The post id of the user.
+     * @return The post details of the user.
      */
-    Post getPostById(final long id);
+    Post getPost(final long id);
 
     /**
-     * Deletes the user post
+     * <p>
+     * Deletes the user post.
+     * </p>
      *
-     * @param id The post id of the user
-     * @return True if post is deleted, false otherwise
+     * @param id The post id of the user.
+     * @return True if post is deleted, false otherwise.
      */
     boolean deletePost(final long id);
 
     /**
-     * Updates the user post details
+     * <p>
+     * Updates the user post details.
+     * </p>
      *
-     * @param updatedPost The updated post of the user
-     * @return True if post is updated, false otherwise
+     * @param updatedPost The updated post of the user.
+     * @return True if post is updated, false otherwise.
      */
     boolean updatePost(final Post updatedPost);
 }

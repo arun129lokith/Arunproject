@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the user detail
+ * <p>
+ * Represents a basic user entity with various properties and methods.
+ * </p>
  *
  * @author Arun
  * @version 1.1
@@ -19,15 +21,19 @@ public class User {
     private List<Post> posts;
 
     public List<Post> getPosts() {
-        if (posts == null) {
-            this.posts = new ArrayList<>();
+        if (this.posts == null) {
+            return new ArrayList<>();
         }
 
         return posts;
     }
 
-    public void setPosts(final List<Post> posts) {
-        this.posts = posts;
+    public void addPost(final Post post) {
+        if (this.posts == null) {
+            this.posts = new ArrayList<>();
+        }
+        posts.add(post);
+
     }
 
     public long getId() {

@@ -31,7 +31,7 @@ public class Validation {
      * @return True if email is valid, false otherwise.
      */
     public boolean validateEmail(final String email) {
-        return email.matches("^[a-z][a-z\\d._]+@[a-z]{5,10}.[a-z]{2,3}$");
+        return email.matches("^[a-z][a-z\\d._]+@[a-z]{5,}.[a-z]{2,3}$");
     }
 
     /**

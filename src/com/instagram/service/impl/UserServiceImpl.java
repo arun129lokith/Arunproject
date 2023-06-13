@@ -8,63 +8,61 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Implements the service of the user
+ * <p>
+ * Handles the logic for user related operation and implements the service of the user.
+ * </p>
  *
  * @author Arun
  * @version 1.1
  */
 public class UserServiceImpl implements UserService {
 
-    private static final Map<String, User> USERS = new HashMap<>();
+    private static final Map<Long, User> USERS = new HashMap<>();
+    private static long id = 0L;
 
     /**
      * {@inheritDoc}
+     *
+     *
      */
     @Override
-    public boolean signUp(final User user) {
-        if (USERS.containsKey(user.getEmail())) {
-            return false;
-        }
-        USERS.put(user.getEmail(), user);
+    public long signUp(final User user) {
+        for (final User existingUser : USERS.values()) {
 
-        return true;
+            if (user.getEmail().equals(existingUser.getEmail())) {
+                return 0;
+            }
+        }
+        user.setId(++id);
+        USERS.put(user.getId(), user);
+
+        return user.getId();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean signIn(final User user) {
-        if (USERS.containsKey(user.getEmail())) {
-            final User existingUser = USERS.get(user.getEmail());
+    public long signIn(final User user) {
+        for (Map.Entry<Long, User> entry : USERS.entrySet()) {
+            final User existingUser = entry.getValue();
 
-            return existingUser.getPassword().equals(user.getPassword());
-        }
-
-        for (final User existingUser : USERS.values()) {
-
-            if (existingUser.getMobileNumber().equals(user.getMobileNumber())
+            if (existingUser.getEmail().equals(user.getEmail()) && existingUser.getPassword().equals(user.getPassword())
+                    || existingUser.getMobileNumber().equals(user.getMobileNumber())
                     && existingUser.getPassword().equals(user.getPassword())) {
-                return true;
+                return entry.getKey();
             }
         }
 
-        return false;
+        return 0;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public User getUser(final Long id) {
-        for (final User existingUser : USERS.values()) {
-
-            if (id.equals(existingUser.getId())) {
-                return existingUser;
-            }
-        }
-
-        return null;
+    public User getUser(final long id) {
+        return USERS.containsKey(id) ? USERS.get(id) : null;
     }
 
     /**
@@ -79,7 +77,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isValidUpdate(final User user) {
+    public boolean updateUser(final User user) {
         for (final User existingUser : USERS.values()) {
 
             if (existingUser.getId() == user.getId()) {
@@ -98,14 +96,19 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public boolean deleteUserAccount(final String email) {
-        if (USERS.containsKey(email)) {
-            USERS.remove(email);
+    public boolean deleteUserAccount(final long id) {
+        if (USERS.containsKey(id)) {
+            USERS.remove(id);
 
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public User getUserById(final long id) {
+        return USERS.containsKey(id) ? USERS.get(id) : null;
     }
 }
 

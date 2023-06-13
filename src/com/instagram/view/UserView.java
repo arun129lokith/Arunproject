@@ -267,9 +267,13 @@ public class UserView {
         final long id = Long.parseLong(SCANNER.nextLine());
         final User user = new User();
 
+        System.out.println(user.getPosts());
+
         for (final Post post : user.getPosts()) {
 
-            if (post.getUserId() == id) {
+            System.out.println(post.getUserId());
+
+            if (id == post.getUserId()) {
                 System.out.println(post);
             }
         }
@@ -324,11 +328,13 @@ public class UserView {
      */
     private void logout() {
         System.out.println("Logged Out Successfully");
+
         if (exitAccess()) {
             SCANNER.close();
             System.exit(0);
         }
         menu();
+
     }
 
     /**
@@ -342,6 +348,7 @@ public class UserView {
         userChoice(user);
         user.setPassword(getPassword());
         final long id = USER_CONTROLLER.signIn(user);
+        System.out.println(id);
 
         if (0 != id) {
             System.out.println("Sign in successfully");

@@ -1,42 +1,50 @@
 package com.instagram.model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.sql.Timestamp;
 
 /**
- * Represents the post of the user
+ * <p>
+ * Represents the post entity of the user with various properties and methods.
+ * </p>
  *
  * @author Arun
  * @version 1.1
  */
 public class Post {
 
-    private User user;
+    private long userId;
     private long id;
     private String caption;
     private String location;
-    private LocalTime time;
-    private LocalDate date;
-    private PostFormat postFormat;
+    private Timestamp timestamp;
+    private Format format;
 
-    public enum PostFormat {
+    public enum Format {
         IMAGE, VIDEO;
     }
 
-    public PostFormat getPostFormat() {
-        return postFormat;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setPostFormat(final PostFormat postFormat) {
-        this.postFormat = postFormat;
+    public void setTimestamp(final Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public User getUser() {
-        return user;
+    public Format getFormat() {
+        return format;
     }
 
-    public void setUser(final User user) {
-        this.user = user;
+    public void setFormat(final Format format) {
+        this.format = format;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(final long userId) {
+        this.userId = userId;
     }
 
     public long getId() {
@@ -63,24 +71,8 @@ public class Post {
         this.location = location;
     }
 
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(final LocalTime time) {
-        this.time = time;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(final LocalDate date) {
-        this.date = date;
-    }
-
     public String toString() {
-        return String.format("Id = %d, \tCaption = %s, \tLocation = %s, \tTime = %s, \tDate = %s",
-                              id, caption, location, time, date);
+        return String.format("Id = %d, Caption = %s, Location = %s, Time And Date = %s, User Id = %d, Format = %s",
+                              id, caption, location, timestamp, userId, format);
     }
 }

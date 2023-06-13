@@ -5,7 +5,9 @@ import com.instagram.model.User;
 import java.util.Collection;
 
 /**
+ * <p>
  * Provides service for the user
+ * </p>
  *
  * @author Arun
  * @version 1.1
@@ -13,49 +15,71 @@ import java.util.Collection;
 public interface UserService {
 
     /**
+     * <p>
      * Signs up a new user with user details of user class.
+     * </p>
      *
      * @param user The user object containing the details of the user.
      * @return True if sign-up is successful, false otherwise.
      */
-    boolean signUp(final User user);
+    long signUp(final User user);
 
     /**
+     * <p>
      * Signs in a new user with user details of user class.
+     * </p>
      *
      * @param user The user object containing the details of the user.
      * @return True if sign-in is successful, false otherwise.
      */
-    boolean signIn(final User user);
+    long signIn(final User user);
 
     /**
+     * <p>
      * Gets the user details of the user.
+     * </p>
      *
      * @param id The id of the user.
      * @return The user details.
      */
-    User getUser(final Long id);
+    User getUser(final long id);
 
     /**
+     * <p>
      * Collects the all user information.
+     * </p>
      *
      * @return The collection of user details.
      */
     Collection<User> getAllUsers();
 
     /**
-     * Updates the user details
+     * <p>
+     * Updates the user details.
+     * </p>
      *
      * @param user The user object contains user details.
      * @return True if user details is update, false otherwise
      */
-    boolean isValidUpdate(final User user);
+    boolean updateUser(final User user);
 
     /**
+     * <p>
      * Deletes the user account details.
+     * </p>
      *
-     * @param email The email of the user.
+     * @param id The id of the user.
      * @return True if account is deleted, false otherwise.
      */
-    boolean deleteUserAccount(final String email);
+    boolean deleteUserAccount(final long id);
+
+    /**
+     * <p>
+     * Gets the user details by id of the user.
+     * </p>
+     *
+     * @param id The id of the user.
+     * @return The user information.
+     */
+    User getUserById(final long id);
 }
