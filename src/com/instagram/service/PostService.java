@@ -21,7 +21,7 @@ public interface PostService {
      *
      * @param post The post detail of the user.
      */
-    boolean createPost(final Post post);
+    void create(final Post post);
 
     /**
      * <p>
@@ -40,7 +40,7 @@ public interface PostService {
      * @param id The post id of the user.
      * @return The post details of the user.
      */
-    Post getPost(final long id);
+    Post getPost(final Long id);
 
     /**
      * <p>
@@ -50,7 +50,7 @@ public interface PostService {
      * @param id The post id of the user.
      * @return True if post is deleted, false otherwise.
      */
-    boolean deletePost(final long id);
+    boolean delete(final Long id);
 
     /**
      * <p>
@@ -60,5 +60,5 @@ public interface PostService {
      * @param updatedPost The updated post of the user.
      * @return True if post is updated, false otherwise.
      */
-    boolean updatePost(final Post updatedPost);
+    void update(final Post updatedPost);
 }

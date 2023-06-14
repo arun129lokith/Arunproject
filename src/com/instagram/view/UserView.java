@@ -18,8 +18,8 @@ import java.util.Scanner;
 public class UserView {
 
     private static final Scanner SCANNER = new Scanner(System.in);
-    private static final UserController USER_CONTROLLER = new UserController();
-    private static final Validation USER_VALIDATION = new Validation();
+    private static final UserController USER_CONTROLLER = UserController.getInstance();
+    private static final Validation USER_VALIDATION = Validation.getInstance();
     private static UserView userView = null;
 
     private UserView(){}
@@ -32,7 +32,7 @@ public class UserView {
      * @return The user view object.
      */
     public static UserView getInstance() {
-        if (userView == null) {
+        if (null == userView) {
             userView = new UserView();
         }
 
@@ -83,9 +83,15 @@ public class UserView {
                 "If You Want To Exit Press '!'"));
         final String name = SCANNER.nextLine().trim();
 
-        exitBack(name);
+        exitMenu(name);
 
-        return USER_VALIDATION.validateUserName(name) ? name : getName();
+        if (USER_CONTROLLER.isNameExist(USER_VALIDATION.validateUserName(name) ? name : getName())) {
+            System.out.println("User Name Already Exist. Please Re-enter The Valid User Name");
+
+            return getName();
+        }
+
+        return name;
     }
 
     /**
@@ -102,9 +108,15 @@ public class UserView {
                 "\nIF You Want To Exit Press '!'"));
         final String email = SCANNER.nextLine().trim();
 
-        exitBack(email);
+        exitMenu(email);
 
-        return USER_VALIDATION.validateEmail(email) ? email : getEmail();
+        if (USER_CONTROLLER.isEmailExist(USER_VALIDATION.validateEmail(email) ? email : getEmail())) {
+            System.out.println("User Email Is Already Exist. Please Re-enter The Valid User Email");
+
+            return getEmail();
+        }
+
+        return email;
     }
 
     /**
@@ -120,7 +132,7 @@ public class UserView {
                 "\nIF You Want To Exit Press '!'"));
         final String password = SCANNER.nextLine().trim();
 
-        exitBack(password);
+        exitMenu(password);
 
         return USER_VALIDATION.validatePassword(password) ? password : getPassword();
     }
@@ -137,9 +149,16 @@ public class UserView {
                 "Contains 10 Digits  And Starts With [6-9]]", "\nIf You Want To Exit Press '!'"));
         final String mobileNumber = SCANNER.nextLine().trim();
 
-        exitBack(mobileNumber);
+        exitMenu(mobileNumber);
 
-        return USER_VALIDATION.validateMobileNumber(mobileNumber) ? mobileNumber : getMobileNumber();
+        if (USER_CONTROLLER.isMobileNumberExist(USER_VALIDATION.validateMobileNumber(mobileNumber) ? mobileNumber
+                : getMobileNumber())) {
+            System.out.println("User MobileNumber Is Already Exist. Please Re-enter The Valid Mobile Number");
+
+            return getMobileNumber();
+        }
+
+        return mobileNumber;
     }
 
     /**
@@ -165,6 +184,8 @@ public class UserView {
      * <p>
      * Gets the user details of the user.
      * </p>
+     *
+     * @return Represents {@link User} information.
      */
     public User getUser() {
         System.out.println("Enter Your UserId:");
@@ -196,20 +217,18 @@ public class UserView {
         user.setEmail(getEmail());
         user.setPassword(getPassword());
         user.setMobileNumber(getMobileNumber());
-        final long id = USER_CONTROLLER.signUp(user);
 
-        if (0 != id) {
+        if (USER_CONTROLLER.signUp(user)) {
             System.out.println("Sign Up Successfully");
 
             if (exitAccess()) {
                 menu();
             } else {
-                userScreen(id);
+                System.out.println(USER_CONTROLLER.getId(user));
+                userScreen(USER_CONTROLLER.getId(user));
             }
-        } else {
-            System.out.println("User Already Exists. Please Try Again");
-            menu();
         }
+        menu();
     }
 
     /**
@@ -219,7 +238,7 @@ public class UserView {
      *
      * @param id The id of the user.
      */
-    public void userScreen(final long id) {
+    public void userScreen(final Long id) {
         System.out.println(String.join(" ","Click 1 To User Post Menu\nClick 2 To Logout", "\nClick 3",
                 "To Get User\nClick 4 To Get All User \nClick 5 To Update User\nClick 6 To Delete User",
                 "\nClick 7 To Main Menu\nClick 8 To Display"));
@@ -281,12 +300,12 @@ public class UserView {
 
     /**
      * <p>
-     * Users to enter update details and shows the status of the process.
+     * Users to enter update details of the user information.
      * </p>
      *
      * @param id The id of the user.
      */
-    private void updateUserDetails(final long id) {
+    private void updateUserDetails(final Long id) {
         final User user = new User();
         final User userDetail = getUserById(id);
 
@@ -294,8 +313,8 @@ public class UserView {
         user.setPassword(exitAccess() ? userDetail.getPassword() : getPassword());
         user.setEmail(exitAccess() ? userDetail.getEmail() : getEmail());
 
-        System.out.println((USER_CONTROLLER.updateUser(user)) ? "User Account Updated Successfully"
-                : "User Account Not Updated");
+        USER_CONTROLLER.updateUser(user);
+        System.out.println("User Account Updated Successfully");
     }
 
     /**
@@ -304,9 +323,9 @@ public class UserView {
      * </p>
      *
      * @param id The id of the user.
-     * @return The information of the user.
+     * @return Represents {@link User} information.
      */
-    private User getUserById(final long id) {
+    public User getUserById(final Long id) {
         return USER_CONTROLLER.getUserById(id);
     }
 
@@ -347,12 +366,11 @@ public class UserView {
 
         userChoice(user);
         user.setPassword(getPassword());
-        final long id = USER_CONTROLLER.signIn(user);
-        System.out.println(id);
 
-        if (0 != id) {
+        if (USER_CONTROLLER.signIn(user)) {
             System.out.println("Sign in successfully");
-            userScreen(id);
+            System.out.println(USER_CONTROLLER.getId(user));
+            userScreen(USER_CONTROLLER.getId(user));
         } else {
             System.out.println("User Not Found. Please Try Again");
             menu();
@@ -364,7 +382,7 @@ public class UserView {
      * Gets the user choice for sign in with email or mobile number.
      * </p>
      *
-     * @param user The user object containing user details.
+     * @param user Represents the user details.
      */
     private void userChoice(final User user) {
         System.out.println("Click 1 To Get Email\nClick 2 To Get Mobile Number");
@@ -388,9 +406,9 @@ public class UserView {
      * Exits the screen to menu.
      * </p>
      *
-     * @param userChoice The user choice for the exit
+     * @param userChoice The user choice for the exit.
      */
-    private void exitBack(final String userChoice) {
+    private void exitMenu(final String userChoice) {
         if (USER_VALIDATION.backMenu(userChoice)) {
             menu();
         }
@@ -401,7 +419,7 @@ public class UserView {
      * Checks the process to continue or exit.
      * </p>
      *
-     * @return True if exit the process, false otherwise
+     * @return True if exit the process, false otherwise.
      */
     public boolean exitAccess() {
         System.out.println(String.join(" ","Do You Want To Continue The Process Press 'Any Word'",

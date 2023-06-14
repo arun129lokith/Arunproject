@@ -12,8 +12,8 @@ import java.sql.Timestamp;
  */
 public class Post {
 
-    private long userId;
-    private long id;
+    private Long userId;
+    private Long id;
     private String caption;
     private String location;
     private Timestamp timestamp;

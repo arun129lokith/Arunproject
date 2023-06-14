@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class User {
 
-    private long id;
+    private Long id;
     private String mobileNumber;
     private String name;
     private String email;
@@ -21,7 +21,7 @@ public class User {
     private List<Post> posts;
 
     public List<Post> getPosts() {
-        if (this.posts == null) {
+        if (null == this.posts) {
             return new ArrayList<>();
         }
 
@@ -29,18 +29,14 @@ public class User {
     }
 
     public void addPost(final Post post) {
-        if (this.posts == null) {
-            this.posts = new ArrayList<>();
-        }
-        posts.add(post);
-
+        getPosts().add(post);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 

@@ -13,7 +13,18 @@ import java.util.Collection;
  */
 public class PostController {
 
-    private static final PostService POST_SERVICE = new PostServiceImpl();
+    private static final PostService POST_SERVICE = PostServiceImpl.getInstance();
+    private static PostController postController = null;
+
+    private PostController() {}
+
+    public static PostController getInstance() {
+        if (null == postController) {
+            postController = new PostController();
+        }
+
+        return postController;
+    }
 
     /**
      * <p>
@@ -22,8 +33,8 @@ public class PostController {
      *
      * @param post The post detail of the user.
      */
-    public boolean createPost(final Post post) {
-        return POST_SERVICE.createPost(post);
+    public void create(final Post post) {
+        POST_SERVICE.create(post);
     }
 
     /**
@@ -45,7 +56,7 @@ public class PostController {
      * @param id The post id of the user
      * @return The post details of the user
      */
-    public Post getPost(final long id) {
+    public Post getPost(final Long id) {
         return POST_SERVICE.getPost(id);
     }
 
@@ -57,8 +68,8 @@ public class PostController {
      * @param id The post id of the user
      * @return True if post is deleted, false otherwise
      */
-    public boolean deletePost(final long id) {
-        return POST_SERVICE.deletePost(id);
+    public boolean delete(final Long id) {
+        return POST_SERVICE.delete(id);
     }
 
     /**
@@ -69,7 +80,7 @@ public class PostController {
      * @param updatedPost The post of the user
      * @return True if post is updated, false otherwise
      */
-    public boolean updatePost(final Post updatedPost) {
-        return POST_SERVICE.updatePost(updatedPost);
+    public void update(final Post updatedPost) {
+        POST_SERVICE.update(updatedPost);
     }
 }

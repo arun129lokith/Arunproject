@@ -10,6 +10,25 @@ package com.instagram.view.validation;
  */
 public class Validation {
 
+    private static Validation validation = null;
+
+    private Validation() {}
+
+    /**
+     * <p>
+     * Gets a static instance object of the class.
+     * </p>
+     *
+     * @return The validation object.
+     */
+    public static Validation getInstance() {
+        if (null == validation) {
+            validation = new Validation();
+        }
+
+        return validation;
+    }
+
     /**
      * <p>
      * Validates the username of the user.
@@ -66,11 +85,7 @@ public class Validation {
      * @param userInput The input of the user details.
      */
     public boolean backMenu(final String userInput) {
-        if (userInput.contains("!")) {
-            return true;
-        }
-
-        return false;
+        return userInput.contains("!");
     }
 
     /**

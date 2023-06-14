@@ -3,6 +3,7 @@ package com.instagram.service.impl;
 import com.instagram.model.Post;
 import com.instagram.model.User;
 import com.instagram.service.PostService;
+import com.instagram.view.UserView;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +20,18 @@ import java.util.ArrayList;
 public class PostServiceImpl implements PostService {
 
     private static final List<Post> POSTS = new ArrayList<>();
-    private static long id = 0L;
+    private static Long id = 0L;
+    private static PostServiceImpl postServiceImpl = null;
+
+    private PostServiceImpl() {}
+
+    public static PostServiceImpl getInstance() {
+        if (null == postServiceImpl) {
+            postServiceImpl = new PostServiceImpl();
+        }
+
+        return postServiceImpl;
+    }
 
     /**
      * {@inheritDoc}
@@ -28,13 +40,13 @@ public class PostServiceImpl implements PostService {
      * @return True if post is created, false otherwise.
      */
     @Override
-    public boolean createPost(final Post post) {
-        final User user = new User();
+    public void create(final Post post) {
+        final UserView userView = UserView.getInstance();
+        final User user = userView.getUserById(post.getUserId()) ;
 
         post.setId(++id);
         user.addPost(post);
-
-        return POSTS.add(post);
+        POSTS.add(post);
     }
 
     /**
@@ -49,9 +61,12 @@ public class PostServiceImpl implements PostService {
 
     /**
      * {@inheritDoc}
+     *
+     * @param id The id of the post.
+     * @return The post of the user.
      */
     @Override
-    public Post getPost(final long id) {
+    public Post getPost(final Long id) {
         for (final Post post : POSTS) {
 
             if (post.getId() == id) {
@@ -64,38 +79,32 @@ public class PostServiceImpl implements PostService {
 
     /**
      * {@inheritDoc}
+     *
+     * @param id The id of the post.
+     * @return True if post is removed, false otherwise.
      */
     @Override
-    public boolean deletePost(final long id) {
+    public boolean delete(final Long id) {
         final Post post = getPost(id);
 
-        if (! POSTS.isEmpty()) {
-            return POSTS.remove(post);
-        }
-
-        return false;
+        return POSTS.contains(post) && POSTS.remove(post);
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @param updatedPost The update detail of the post.
+     * @return True if post is updated, false otherwise.
      */
     @Override
-    public boolean updatePost(final Post updatedPost) {
-        final User user = new User();
-
+    public void update(final Post updatedPost) {
         for (int index = 0; index < POSTS.size(); index++) {
-
-           /* if (user.getPosts().get(index).getId() == updatedPost.getId()) {
-                user.getPosts().set(index, updatedPost);
-            }*/
 
             if (POSTS.get(index).getId() == updatedPost.getId()) {
                 POSTS.set(index, updatedPost);
 
-                return true;
+                break;
             }
         }
-
-        return false;
     }
 }

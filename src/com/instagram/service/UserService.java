@@ -22,7 +22,7 @@ public interface UserService {
      * @param user The user object containing the details of the user.
      * @return True if sign-up is successful, false otherwise.
      */
-    long signUp(final User user);
+    boolean signUp(final User user);
 
     /**
      * <p>
@@ -32,7 +32,7 @@ public interface UserService {
      * @param user The user object containing the details of the user.
      * @return True if sign-in is successful, false otherwise.
      */
-    long signIn(final User user);
+    boolean signIn(final User user);
 
     /**
      * <p>
@@ -59,9 +59,9 @@ public interface UserService {
      * </p>
      *
      * @param user The user object contains user details.
-     * @return True if user details is update, false otherwise
+     * @return True if user details is update, false otherwise.
      */
-    boolean updateUser(final User user);
+    void updateUser(final User user);
 
     /**
      * <p>
@@ -82,4 +82,44 @@ public interface UserService {
      * @return The user information.
      */
     User getUserById(final long id);
+
+    /**
+     * <p>
+     * Gets the user id of the user.
+     * </p>
+     *
+     * @param user Represents user detail.
+     * @return The user id of the user.
+     */
+    Long getId(final User user);
+
+    /**
+     * <p>
+     * Checks the username is exists.
+     * </p>
+     *
+     * @param name The name of the user.
+     * @return True if username is exists, false otherwise.
+     */
+    boolean isNameExist(final String name);
+
+    /**
+     * <p>
+     * Checks the email is exists.
+     * </p>
+     *
+     * @param email The email of the user.
+     * @return True if email is exists, false otherwise.
+     */
+    boolean isEmailExist(final String email);
+
+    /**
+     * <p>
+     * Checks the mobile number is exists.
+     * </p>
+     *
+     * @param mobileNumber The mobile number of the user.
+     * @return True if mobile number is exists, false otherwise.
+     */
+    boolean isMobileNumberExist(final String mobileNumber);
 }

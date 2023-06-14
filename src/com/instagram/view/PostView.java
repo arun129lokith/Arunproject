@@ -2,6 +2,7 @@ package com.instagram.view;
 
 import com.instagram.controller.PostController;
 import com.instagram.model.Post;
+import com.instagram.model.Post.Format;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -20,14 +21,14 @@ import java.util.Scanner;
 public class PostView {
 
     private static final Scanner SCANNER = new Scanner(System.in);
-    private static final PostController POST_CONTROLLER = new PostController();
+    private static final PostController POST_CONTROLLER = PostController.getInstance();
     private static final UserView USER_VIEW = UserView.getInstance();
     private static PostView postView = null;
 
     private PostView() {}
 
     public static PostView getInstance() {
-        if (postView == null) {
+        if (null == postView) {
             postView = new PostView();
         }
 
@@ -39,41 +40,41 @@ public class PostView {
      * Prints the post menu of the user.
      * </p>
      */
-    public void menu(final long id) {
+    public void menu(final Long userId) {
         System.out.println(String.join(" ","Click 1 To Create Post\nClick 2 To Display All Post",
                 "\nClick 3 To Delete Post\nClick 4 To Update Post\nClick 5 To Display Single Post\nClick 6 To User",
                 "Screen\nEnter Your Message:"));
-        System.out.println(id);
+        System.out.println(userId);
 
         if ((USER_VIEW.exitAccess())) {
-            USER_VIEW.userScreen(id);
+            USER_VIEW.userScreen(userId);
         }
 
         switch (USER_VIEW.getChoice()) {
             case 1:
-                createPost(id);
+                create(userId);
                 break;
             case 2:
-                displayAllPost();
+                displayAll();
                 break;
             case 3:
-                deletePost();
+                delete();
                 break;
             case 4:
-                updatePost();
+                update();
                 break;
             case 5:
                 getPost();
                 break;
             case 6:
-                USER_VIEW.userScreen(id);
+                USER_VIEW.userScreen(userId);
                 break;
             default:
                 System.out.println("Invalid User Choice. Please Enter The Choice In The Range[1-6]");
-                menu(id);
+                menu(userId);
                 break;
         }
-        menu(id);
+        menu(userId);
     }
 
     /**
@@ -107,20 +108,20 @@ public class PostView {
      * Creates the post of the user.
      * </p>
      *
-     * @param id The id of the user.
+     * @param userId The id of the user.
      */
-    private void createPost(final long id) {
+    private void create(final Long userId) {
         final Post post = new Post();
 
-        getFormat(post);
+        post.setFormat(getFormat(post));
         post.setLocation(getLocation());
         post.setCaption(getCaption());
         post.setTimestamp(Timestamp.from(Instant.now()));
-        System.out.println(id);
-        post.setUserId(id);
+        post.setUserId(userId);
 
-        System.out.println(POST_CONTROLLER.createPost(post) ? "User Posted Successfully" : "User Post Not Created");
-        menu(id);
+        POST_CONTROLLER.create(post);
+        System.out.println("User Posted Successfully");
+        menu(userId);
     }
 
     /**
@@ -129,22 +130,18 @@ public class PostView {
      * </p>
      *
      * @param post The post object containing post detail.
+     * @return Represents {@link Post} format of the user.
      */
-    private void getFormat(final Post post) {
-        System.out.println("Enter Post Format\nClick 1 To Image\nClick 2 To Video");
-
-        switch (USER_VIEW.getChoice()) {
-            case 1:
-                post.setFormat(Post.Format.IMAGE);
-                break;
-            case 2:
-                post.setFormat(Post.Format.VIDEO);
-                break;
-            default:
-                System.out.println("Invalid User Choice.Please Enter 1 Or 2 To Get Post Format");
-                getFormat(post);
-                break;
+    private Format getFormat(final Post post) {
+        System.out.println("Enter Post Format:\n[Post Format Must Be 'Image' or 'Video']");
+        final String format = SCANNER.nextLine().toUpperCase();
+        try {
+            return Post.Format.valueOf(format);
+        } catch (IllegalArgumentException message) {
+            System.out.println("Invalid Post Format. Please Try Again");
         }
+
+        return getFormat(post);
     }
 
     /**
@@ -152,7 +149,7 @@ public class PostView {
      * Prints the all posts, posted by user.
      * </p>
      */
-    public void displayAllPost() {
+    public void displayAll() {
         System.out.println(POST_CONTROLLER.getAllPost());
     }
 
@@ -177,9 +174,9 @@ public class PostView {
      * Users to delete the post.
      * </p>
      */
-    public void deletePost() {
+    public void delete() {
         System.out.println("Enter Your PostId:");
-        System.out.println(POST_CONTROLLER.deletePost(Long.parseLong(SCANNER.nextLine())) ? "Post Deleted Successfully"
+        System.out.println(POST_CONTROLLER.delete(Long.parseLong(SCANNER.nextLine())) ? "Post Deleted Successfully"
                 : "Post Not Found");
     }
 
@@ -188,21 +185,21 @@ public class PostView {
      * Sets the details of the user post to update.
      * </p>
      */
-    private void updatePost() {
+    private void update() {
         System.out.println("Get The Post Of The User To Update Post Details");
         final Post post = new Post();
         final Post detail = getPost();
 
-        if (detail != null) {
+        if (null != detail) {
             post.setId(detail.getId());
             post.setLocation(USER_VIEW.exitAccess() ? detail.getLocation() : getLocation());
             post.setCaption(USER_VIEW.exitAccess() ? detail.getCaption() : getCaption());
             post.setTimestamp(Timestamp.from(Instant.now()));
 
-            System.out.println(POST_CONTROLLER.updatePost(post) ? "User Post Updated Successfully" : "Post Not Updated");
+            POST_CONTROLLER.update(post);
+            System.out.println("User Post Updated Successfully");
         } else {
             System.out.println("Post Not Found. Please Try Again");
-            updatePost();
         }
     }
 }
