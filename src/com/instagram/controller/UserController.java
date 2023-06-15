@@ -41,7 +41,7 @@ public class UserController {
      * Signs up a new user with user details of user class.
      * </p>
      *
-     * @param user The user object contains details of the user.
+     * @param user Represents {@link User} details.
      * @return True if sign-up is successful, false otherwise.
      */
     public boolean signUp(final User user) {
@@ -53,7 +53,7 @@ public class UserController {
      * Signs in a new user with user details of user class.
      * </p>
      *
-     * @param user The user object contains details of the user.
+     * @param user Represents {@link User} details.
      * @return True if sign-in is successful, false otherwise.
      */
     public boolean signIn(final User user) {
@@ -65,7 +65,7 @@ public class UserController {
      * Gets the user details of the user.
      * </p>
      *
-     * @param id The id of the user.
+     * @param id Represents user id.
      * @return The user details.
      */
     public User getUser(final Long id) {
@@ -88,7 +88,7 @@ public class UserController {
      * Updates the user details.
      * </p>
      *
-     * @param user The user object contains user details.
+     * @param user Represent {@link User} details.
      * @return True if user details is update, false otherwise
      */
     public void updateUser(final User user) {
@@ -100,7 +100,7 @@ public class UserController {
      * Deletes the user account details.
      * </p>
      *
-     * @param id The id of the user.
+     * @param id Represents user id.
      * @return True if account is deleted, false otherwise.
      */
     public boolean deleteUserAccount(final Long id) {
@@ -112,7 +112,7 @@ public class UserController {
      * Gets the user detail by the id of the user.
      * </p>
      *
-     * @param id The id of the user.
+     * @param id Represents user id.
      * @return The information of the user.
      */
     public User getUserById(final Long id) {
@@ -124,7 +124,7 @@ public class UserController {
      * Gets the user id of the user.
      * </p>
      *
-     * @param user Represents user detail.
+     * @param user Represents {@link User} details.
      * @return The user id of the user.
      */
     public Long getId(final User user) {
@@ -136,7 +136,7 @@ public class UserController {
      * Checks the username is exists.
      * </p>
      *
-     * @param name The name of the user.
+     * @param name Represents user name.
      * @return True if username is exists, false otherwise.
      */
     public boolean isNameExist(final String name) {
@@ -148,7 +148,7 @@ public class UserController {
      * Checks the email is exists.
      * </p>
      *
-     * @param email The email of the user.
+     * @param email Represents user email.
      * @return True if email is exists, false otherwise.
      */
     public boolean isEmailExist(final String email) {
@@ -160,7 +160,7 @@ public class UserController {
      * Checks the mobile number is exists.
      * </p>
      *
-     * @param mobileNumber The mobile number of the user.
+     * @param mobileNumber Represents user mobile number.
      * @return True if mobile number is exists, false otherwise.
      */
     public boolean isMobileNumberExist(final String mobileNumber) {

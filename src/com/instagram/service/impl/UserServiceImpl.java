@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * <p>
- * Handles the logic for user related operation and implements the service of the user.
+ * Implements the service of the user related operation.
  * </p>
  *
  * @author Arun
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     /**
      * {@inheritDoc}
      *
-     * @param user The user object containing the details of the user.
+     * @param user Represents {@link User} details.
      * @return True if sign-in is successful, false otherwise.
      */
     @Override
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     /**
      * {@inheritDoc}
      *
-     * @param user The user object containing the details of the user.
+     * @param user Represents {@link User} details.
      * @return True if sign-in is successful, false otherwise.
      */
     @Override
@@ -64,9 +64,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * {@inheritDoc}
+     * Checks the mobile number and password is exists.
      *
-     * @param user Represents te user detail.
+     * @param user Represents {@link User} details.
      * @return True if mobile number is exists, false otherwise.
      */
     private boolean isMobileNumberExist(final User user) {
@@ -82,9 +82,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * {@inheritDoc}
+     * Checks the email and password is exists.
      *
-     * @param user Represents te user detail.
+     * @param user Represents {@link User} details.
      * @return True if email is exists, false otherwise.
      */
     private boolean isEmailExist(final User user) {
@@ -102,11 +102,11 @@ public class UserServiceImpl implements UserService {
     /**
      * {@inheritDoc}
      *
-     * @param id The id of the user.
+     * @param id Represents user id.
      * @return The user details.
      */
     @Override
-    public User getUser(final long id) {
+    public User getUser(final Long id) {
         return USERS.containsKey(id) ? USERS.get(id) : null;
     }
 
@@ -123,8 +123,7 @@ public class UserServiceImpl implements UserService {
     /**
      * {@inheritDoc}
      *
-     * @param user The user object contains user details.
-     * @return True if user details is update, false otherwise.
+     * @param user Represents {@link User} details.
      */
     @Override
     public void updateUser(final User user) {
@@ -142,11 +141,11 @@ public class UserServiceImpl implements UserService {
     /**
      * {@inheritDoc}
      *
-     * @param id The id of the user.
+     * @param id Represents user id.
      * @return True if account is deleted, false otherwise.
      */
     @Override
-    public boolean deleteUserAccount(final long id) {
+    public boolean deleteUserAccount(final Long id) {
         if (USERS.containsKey(id)) {
             USERS.remove(id);
 
@@ -156,11 +155,23 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param id Represents user id.
+     * @return Users details.
+     */
     @Override
-    public User getUserById(final long id) {
+    public User getUserById(final Long id) {
         return USERS.containsKey(id) ? USERS.get(id) : null;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param user Represents {@link User} detail.
+     * @return Users id.
+     */
     @Override
     public Long getId(final User user) {
         for (final Map.Entry<Long, User> entry : USERS.entrySet()) {
@@ -175,6 +186,12 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param name Represents user name.
+     * @return True if name is exists, false otherwise.
+     */
     @Override
     public boolean isNameExist(final String name) {
         for (final User existingUser : USERS.values()) {
@@ -185,6 +202,13 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param email Represents user email.
+     * @return True if email is exists, false otherwise.
+     */
+    @Override
     public boolean isEmailExist(final String email) {
         for (final User existingUser : USERS.values()) {
 
@@ -194,6 +218,13 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param mobileNumber Represents user mobile number.
+     * @return True if mobile number is exists, false otherwise.
+     */
+    @Override
     public boolean isMobileNumberExist(final String mobileNumber) {
         for (final User existingUser : USERS.values()) {
 

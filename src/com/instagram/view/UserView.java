@@ -85,10 +85,22 @@ public class UserView {
 
         exitMenu(name);
 
-        if (USER_CONTROLLER.isNameExist(USER_VALIDATION.validateUserName(name) ? name : getName())) {
+        return USER_VALIDATION.validateUserName(name) ? name : getName();
+    }
+
+    /**
+     * <p>
+     * Gets the valid username is not already exists in the application.
+     * </p>
+     *
+     * @param name Represents user name.
+     * @return The valid username.
+     */
+    private String getValidName(final String name) {
+        if (USER_CONTROLLER.isNameExist(name)) {
             System.out.println("User Name Already Exist. Please Re-enter The Valid User Name");
 
-            return getName();
+            return getValidName(getName());
         }
 
         return name;
@@ -110,10 +122,22 @@ public class UserView {
 
         exitMenu(email);
 
-        if (USER_CONTROLLER.isEmailExist(USER_VALIDATION.validateEmail(email) ? email : getEmail())) {
-            System.out.println("User Email Is Already Exist. Please Re-enter The Valid User Email");
+        return USER_VALIDATION.validateEmail(email) ? email : getEmail();
+    }
 
-            return getEmail();
+    /**
+     * <p>
+     * Gets the email is not already exists in the application.
+     * </p>
+     *
+     * @param email Represents user email.
+     * @return The mobile number of the user.
+     */
+    private String getValidEmail(final String email) {
+        if (USER_CONTROLLER.isEmailExist(email)) {
+            System.out.println("User Email Is Already Exist. Please Re-enter The Valid User Name");
+
+            return getValidEmail(getEmail());
         }
 
         return email;
@@ -151,11 +175,22 @@ public class UserView {
 
         exitMenu(mobileNumber);
 
-        if (USER_CONTROLLER.isMobileNumberExist(USER_VALIDATION.validateMobileNumber(mobileNumber) ? mobileNumber
-                : getMobileNumber())) {
-            System.out.println("User MobileNumber Is Already Exist. Please Re-enter The Valid Mobile Number");
+        return USER_VALIDATION.validateMobileNumber(mobileNumber) ? mobileNumber : getMobileNumber();
+    }
 
-            return getMobileNumber();
+    /**
+     * <p>
+     * Gets the mobile number is not already exists in the application.
+     * </p>
+     *
+     * @param mobileNumber Represents user mobile number.
+     * @return The mobile number of the user.
+     */
+    private String getValidMobileNumber(final String mobileNumber) {
+        if (USER_CONTROLLER.isMobileNumberExist(mobileNumber)) {
+            System.out.println("User Mobile Number Is Already Exist. Please Re-enter The Valid User Name");
+
+            return getValidMobileNumber(getMobileNumber());
         }
 
         return mobileNumber;
@@ -213,10 +248,10 @@ public class UserView {
     private void signUp() {
         final User user = new User();
 
-        user.setName(getName());
-        user.setEmail(getEmail());
+        user.setName(getValidName(getName()));
+        user.setEmail(getValidEmail(getEmail()));
         user.setPassword(getPassword());
-        user.setMobileNumber(getMobileNumber());
+        user.setMobileNumber(getValidMobileNumber(getMobileNumber()));
 
         if (USER_CONTROLLER.signUp(user)) {
             System.out.println("Sign Up Successfully");
@@ -224,7 +259,6 @@ public class UserView {
             if (exitAccess()) {
                 menu();
             } else {
-                System.out.println(USER_CONTROLLER.getId(user));
                 userScreen(USER_CONTROLLER.getId(user));
             }
         }
@@ -236,7 +270,7 @@ public class UserView {
      * Prints the features of the application.
      * </p>
      *
-     * @param id The id of the user.
+     * @param id Represents user id.
      */
     public void userScreen(final Long id) {
         System.out.println(String.join(" ","Click 1 To User Post Menu\nClick 2 To Logout", "\nClick 3",
@@ -267,7 +301,7 @@ public class UserView {
                 menu();
                 break;
             case 8:
-                displayUserPost();
+                displayUserPost(id);
                 break;
             default:
                 System.out.println("Invalid User Choice. Please Try Again\n[Enter The Choice In The Range 1-7]");
@@ -280,19 +314,19 @@ public class UserView {
      * <p>
      * Displays the collection of user post.
      * </p>
+     *
+     * @param id Represents user id.
      */
-    private void displayUserPost() {
+    private void displayUserPost(final Long id) {
         System.out.println("Enter The User Id To Get Collection Of Post:");
-        final long id = Long.parseLong(SCANNER.nextLine());
-        final User user = new User();
+        final Long userId = Long.parseLong(SCANNER.nextLine());
+        final User user = getUserById(id);
 
         System.out.println(user.getPosts());
 
         for (final Post post : user.getPosts()) {
 
-            System.out.println(post.getUserId());
-
-            if (id == post.getUserId()) {
+            if (post.getUserId().equals(userId)) {
                 System.out.println(post);
             }
         }
@@ -303,7 +337,7 @@ public class UserView {
      * Users to enter update details of the user information.
      * </p>
      *
-     * @param id The id of the user.
+     * @param id Represents user id.
      */
     private void updateUserDetails(final Long id) {
         final User user = new User();
@@ -319,10 +353,10 @@ public class UserView {
 
     /**
      * <p>
-     * Gets user detail information by id of the user.
+     * Gets user information by id of the user.
      * </p>
      *
-     * @param id The id of the user.
+     * @param id Represents user id.
      * @return Represents {@link User} information.
      */
     public User getUserById(final Long id) {
@@ -336,8 +370,12 @@ public class UserView {
      */
     private void deleteUserAccount() {
         System.out.println("Enter Your User Id:");
-        System.out.println(USER_CONTROLLER.deleteUserAccount(Long.parseLong(SCANNER.nextLine())) ?
-                "User Account Deleted Successfully" : "User Not Found. Please Try Again");
+        if (USER_CONTROLLER.deleteUserAccount(Long.parseLong(SCANNER.nextLine()))) {
+            System.out.println("User Account Deleted Successfully");
+            menu();
+        } else {
+            System.out.println("User Not Found. Please Try Again");
+        }
     }
 
     /**
@@ -382,7 +420,7 @@ public class UserView {
      * Gets the user choice for sign in with email or mobile number.
      * </p>
      *
-     * @param user Represents the user details.
+     * @param user Represents {@link User} details.
      */
     private void userChoice(final User user) {
         System.out.println("Click 1 To Get Email\nClick 2 To Get Mobile Number");
@@ -406,7 +444,7 @@ public class UserView {
      * Exits the screen to menu.
      * </p>
      *
-     * @param userChoice The user choice for the exit.
+     * @param userChoice Represents the choice of the user.
      */
     private void exitMenu(final String userChoice) {
         if (USER_VALIDATION.backMenu(userChoice)) {

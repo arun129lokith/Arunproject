@@ -18,6 +18,13 @@ public class PostController {
 
     private PostController() {}
 
+    /**
+     * <p>
+     * Gets a static instance object of the class.
+     * </p>
+     *
+     * @return The post controller object.
+     */
     public static PostController getInstance() {
         if (null == postController) {
             postController = new PostController();
@@ -31,7 +38,7 @@ public class PostController {
      * Creates the user post.
      * </p>
      *
-     * @param post The post detail of the user.
+     * @param post Represents {@link Post} details.
      */
     public void create(final Post post) {
         POST_SERVICE.create(post);
@@ -53,8 +60,8 @@ public class PostController {
      * Gets the post detail of the user.
      * </p>
      *
-     * @param id The post id of the user
-     * @return The post details of the user
+     * @param id Represents post id.
+     * @return The post details of the user.
      */
     public Post getPost(final Long id) {
         return POST_SERVICE.getPost(id);
@@ -65,8 +72,8 @@ public class PostController {
      * Deletes the user post.
      * </p>
      *
-     * @param id The post id of the user
-     * @return True if post is deleted, false otherwise
+     * @param id Represents post id.
+     * @return True if post is deleted, false otherwise.
      */
     public boolean delete(final Long id) {
         return POST_SERVICE.delete(id);
@@ -77,8 +84,8 @@ public class PostController {
      * Updates the user post details.
      * </p>
      *
-     * @param updatedPost The post of the user
-     * @return True if post is updated, false otherwise
+     * @param updatedPost Represents {@link Post} update details.
+     * @return True if post is updated, false otherwise.
      */
     public void update(final Post updatedPost) {
         POST_SERVICE.update(updatedPost);

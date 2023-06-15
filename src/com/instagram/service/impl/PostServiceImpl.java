@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  * <p>
- * Handles the logic for post related operation and implements the post service of the user.
+ * Implements the service of the post related operation.
  * </p>
  *
  * @author Arun
@@ -25,6 +25,13 @@ public class PostServiceImpl implements PostService {
 
     private PostServiceImpl() {}
 
+    /**
+     * <p>
+     * Gets a static instance object of the class.
+     * </p>
+     *
+     * @return The post service implementation object.
+     */
     public static PostServiceImpl getInstance() {
         if (null == postServiceImpl) {
             postServiceImpl = new PostServiceImpl();
@@ -36,7 +43,7 @@ public class PostServiceImpl implements PostService {
     /**
      * {@inheritDoc}
      *
-     * @param post The post object contains post details.
+     * @param post Represents {@link Post} details of the user.
      * @return True if post is created, false otherwise.
      */
     @Override
@@ -62,14 +69,14 @@ public class PostServiceImpl implements PostService {
     /**
      * {@inheritDoc}
      *
-     * @param id The id of the post.
-     * @return The post of the user.
+     * @param id Represents post id.
+     * @return Represents {@link Post} details.
      */
     @Override
     public Post getPost(final Long id) {
         for (final Post post : POSTS) {
 
-            if (post.getId() == id) {
+            if (post.getId().equals(id)) {
                 return post;
             }
         }
@@ -80,7 +87,7 @@ public class PostServiceImpl implements PostService {
     /**
      * {@inheritDoc}
      *
-     * @param id The id of the post.
+     * @param id Represents post id.
      * @return True if post is removed, false otherwise.
      */
     @Override
@@ -93,14 +100,14 @@ public class PostServiceImpl implements PostService {
     /**
      * {@inheritDoc}
      *
-     * @param updatedPost The update detail of the post.
+     * @param updatedPost Represents {@link Post} update details.
      * @return True if post is updated, false otherwise.
      */
     @Override
     public void update(final Post updatedPost) {
         for (int index = 0; index < POSTS.size(); index++) {
 
-            if (POSTS.get(index).getId() == updatedPost.getId()) {
+            if (POSTS.get(index).getId().equals(updatedPost.getId())) {
                 POSTS.set(index, updatedPost);
 
                 break;

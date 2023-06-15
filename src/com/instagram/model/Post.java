@@ -16,19 +16,20 @@ public class Post {
     private Long id;
     private String caption;
     private String location;
-    private Timestamp timestamp;
+    private Timestamp uploadTime;
     private Format format;
 
     public enum Format {
+
         IMAGE, VIDEO;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getUploadTime() {
+        return uploadTime;
     }
 
-    public void setTimestamp(final Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setUploadTime(final Timestamp uploadTime) {
+        this.uploadTime = uploadTime;
     }
 
     public Format getFormat() {
@@ -39,19 +40,19 @@ public class Post {
         this.format = format;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(final long userId) {
+    public void setUserId(final Long userId) {
         this.userId = userId;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -72,7 +73,7 @@ public class Post {
     }
 
     public String toString() {
-        return String.format("Id = %d, Caption = %s, Location = %s, Time And Date = %s, User Id = %d, Format = %s",
-                              id, caption, location, timestamp, userId, format);
+        return String.format("Id = %d, Caption = %s, Location = %s, Time And Date = %s, User Id = %d, Format = %s\n",
+                              id, caption, location, uploadTime, userId, format);
     }
 }

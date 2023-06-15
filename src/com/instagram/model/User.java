@@ -73,7 +73,7 @@ public class User {
     }
 
     public String toString() {
-        return String.format("Id = %s \tName = %s \tMobileNumber = %s \tEmail = %s",
+        return String.format("Id = %s \tName = %s \tMobileNumber = %s \tEmail = %s\n",
                               id, name, mobileNumber, email);
     }
 }

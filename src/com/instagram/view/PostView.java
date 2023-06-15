@@ -27,6 +27,13 @@ public class PostView {
 
     private PostView() {}
 
+    /**
+     * <p>
+     * Gets a static instance object of the class.
+     * </p>
+     *
+     * @return The post view object.
+     */
     public static PostView getInstance() {
         if (null == postView) {
             postView = new PostView();
@@ -39,12 +46,13 @@ public class PostView {
      * <p>
      * Prints the post menu of the user.
      * </p>
+     *
+     * @param userId Represents user id.
      */
     public void menu(final Long userId) {
         System.out.println(String.join(" ","Click 1 To Create Post\nClick 2 To Display All Post",
                 "\nClick 3 To Delete Post\nClick 4 To Update Post\nClick 5 To Display Single Post\nClick 6 To User",
                 "Screen\nEnter Your Message:"));
-        System.out.println(userId);
 
         if ((USER_VIEW.exitAccess())) {
             USER_VIEW.userScreen(userId);
@@ -108,15 +116,15 @@ public class PostView {
      * Creates the post of the user.
      * </p>
      *
-     * @param userId The id of the user.
+     * @param userId Represents user id.
      */
     private void create(final Long userId) {
         final Post post = new Post();
 
-        post.setFormat(getFormat(post));
+        post.setFormat(getFormat());
         post.setLocation(getLocation());
         post.setCaption(getCaption());
-        post.setTimestamp(Timestamp.from(Instant.now()));
+        post.setUploadTime(Timestamp.from(Instant.now()));
         post.setUserId(userId);
 
         POST_CONTROLLER.create(post);
@@ -129,19 +137,18 @@ public class PostView {
      * Gets the format of the post of the user.
      * </p>
      *
-     * @param post The post object containing post detail.
      * @return Represents {@link Post} format of the user.
      */
-    private Format getFormat(final Post post) {
+    private Format getFormat() {
         System.out.println("Enter Post Format:\n[Post Format Must Be 'Image' or 'Video']");
         final String format = SCANNER.nextLine().toUpperCase();
         try {
-            return Post.Format.valueOf(format);
+            return Format.valueOf(format);
         } catch (IllegalArgumentException message) {
             System.out.println("Invalid Post Format. Please Try Again");
         }
 
-        return getFormat(post);
+        return getFormat();
     }
 
     /**
@@ -194,7 +201,7 @@ public class PostView {
             post.setId(detail.getId());
             post.setLocation(USER_VIEW.exitAccess() ? detail.getLocation() : getLocation());
             post.setCaption(USER_VIEW.exitAccess() ? detail.getCaption() : getCaption());
-            post.setTimestamp(Timestamp.from(Instant.now()));
+            post.setUploadTime(Timestamp.from(Instant.now()));
 
             POST_CONTROLLER.update(post);
             System.out.println("User Post Updated Successfully");
