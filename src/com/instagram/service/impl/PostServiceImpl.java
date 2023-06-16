@@ -52,7 +52,10 @@ public class PostServiceImpl implements PostService {
         final User user = userView.getUserById(post.getUserId()) ;
 
         post.setId(++id);
-        user.addPost(post);
+        List<Post> posts = user.getPosts();
+
+        posts.add(post);
+        user.setPosts(posts);
         POSTS.add(post);
     }
 

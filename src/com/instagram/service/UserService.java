@@ -74,16 +74,6 @@ public interface UserService {
 
     /**
      * <p>
-     * Gets the user details by id of the user.
-     * </p>
-     *
-     * @param id Represents user id.
-     * @return The user information.
-     */
-    User getUserById(final Long id);
-
-    /**
-     * <p>
      * Gets the user id of the user.
      * </p>
      *

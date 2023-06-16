@@ -21,7 +21,23 @@ public class Post {
 
     public enum Format {
 
-        IMAGE, VIDEO;
+        IMAGE(1), VIDEO(2);
+        private int choice;
+
+        Format(final int choice) {
+            this.choice = choice;
+        }
+
+        public static Format findFormat(final int choice) {
+            for (final Format existingFormat : Format.values()) {
+
+                if (existingFormat.choice == choice) {
+                    return existingFormat;
+                }
+            }
+
+            return null;
+        }
     }
 
     public Timestamp getUploadTime() {
@@ -73,7 +89,7 @@ public class Post {
     }
 
     public String toString() {
-        return String.format("Id = %d, Caption = %s, Location = %s, Time And Date = %s, User Id = %d, Format = %s\n",
+        return String.format("Id = %d\nCaption = %s\nLocation = %s\nTime And Date = %s\nUser Id = %d\nFormat = %s",
                               id, caption, location, uploadTime, userId, format);
     }
 }

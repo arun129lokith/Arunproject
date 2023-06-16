@@ -21,15 +21,15 @@ public class User {
     private List<Post> posts;
 
     public List<Post> getPosts() {
-        if (null == this.posts) {
-            return new ArrayList<>();
+        if (null == posts) {
+            posts =new ArrayList<>();
         }
 
         return posts;
     }
 
-    public void addPost(final Post post) {
-        getPosts().add(post);
+    public void setPosts(final List<Post> post) {
+        this.posts = post;
     }
 
     public Long getId() {
@@ -73,7 +73,6 @@ public class User {
     }
 
     public String toString() {
-        return String.format("Id = %s \tName = %s \tMobileNumber = %s \tEmail = %s\n",
-                              id, name, mobileNumber, email);
+        return String.format("Id = %s\nName = %s\nMobileNumber = %s\nEmail = %s\n", id, name, mobileNumber, email);
     }
 }

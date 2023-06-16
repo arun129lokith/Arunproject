@@ -140,15 +140,17 @@ public class PostView {
      * @return Represents {@link Post} format of the user.
      */
     private Format getFormat() {
-        System.out.println("Enter Post Format:\n[Post Format Must Be 'Image' or 'Video']");
-        final String format = SCANNER.nextLine().toUpperCase();
-        try {
-            return Format.valueOf(format);
-        } catch (IllegalArgumentException message) {
-            System.out.println("Invalid Post Format. Please Try Again");
-        }
+        System.out.println("Click 1 To Image Format\nClick 2 To Video Format");
+        final Format format = Format.findFormat(USER_VIEW.getChoice());
+        System.out.println(format);
 
-        return getFormat();
+        if (null != format) {
+            return format;
+        } else {
+            System.out.println("Invalid Post Format Choice. Please Enter Valid Choice For Post Format");
+
+            return getFormat();
+        }
     }
 
     /**
@@ -171,7 +173,7 @@ public class PostView {
         System.out.println("Enter Your PostId:");
         final Post post = POST_CONTROLLER.getPost(Long.parseLong(SCANNER.nextLine()));
 
-        System.out.println(post);
+        System.out.println(null != post ? post : "Post Not Found");
 
         return post;
     }
@@ -195,12 +197,12 @@ public class PostView {
     private void update() {
         System.out.println("Get The Post Of The User To Update Post Details");
         final Post post = new Post();
-        final Post detail = getPost();
+        final Post existingPost = getPost();
 
-        if (null != detail) {
-            post.setId(detail.getId());
-            post.setLocation(USER_VIEW.exitAccess() ? detail.getLocation() : getLocation());
-            post.setCaption(USER_VIEW.exitAccess() ? detail.getCaption() : getCaption());
+        if (null != existingPost) {
+            post.setId(existingPost.getId());
+            post.setLocation(USER_VIEW.exitAccess() ? existingPost.getLocation() : getLocation());
+            post.setCaption(USER_VIEW.exitAccess() ? existingPost.getCaption() : getCaption());
             post.setUploadTime(Timestamp.from(Instant.now()));
 
             POST_CONTROLLER.update(post);

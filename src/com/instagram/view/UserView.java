@@ -275,7 +275,7 @@ public class UserView {
     public void userScreen(final Long id) {
         System.out.println(String.join(" ","Click 1 To User Post Menu\nClick 2 To Logout", "\nClick 3",
                 "To Get User\nClick 4 To Get All User \nClick 5 To Update User\nClick 6 To Delete User",
-                "\nClick 7 To Main Menu\nClick 8 To Display"));
+                "\nClick 7 To Main Menu\nClick 8 To Display Post Of The User"));
         final PostView postView = PostView.getInstance();
 
         switch (getChoice()) {
@@ -314,21 +314,27 @@ public class UserView {
      * <p>
      * Displays the collection of user post.
      * </p>
-     *
-     * @param id Represents user id.
      */
     private void displayUserPost(final Long id) {
         System.out.println("Enter The User Id To Get Collection Of Post:");
         final Long userId = Long.parseLong(SCANNER.nextLine());
         final User user = getUserById(id);
 
-        System.out.println(user.getPosts());
+        if (null != user) {
 
-        for (final Post post : user.getPosts()) {
+            if (! user.getPosts().isEmpty()) {
 
-            if (post.getUserId().equals(userId)) {
-                System.out.println(post);
+                for (final Post post : user.getPosts()) {
+
+                    if (post.getUserId().equals(userId)) {
+                        System.out.println(post);
+                    }
+                }
+            } else {
+                System.out.println("Post Not Created By The User");
             }
+        } else {
+            System.out.println("User Not Found.Please Try Again");
         }
     }
 
@@ -341,11 +347,13 @@ public class UserView {
      */
     private void updateUserDetails(final Long id) {
         final User user = new User();
-        final User userDetail = getUserById(id);
+        final User existingUser = getUserById(id);
 
-        user.setName(exitAccess() ? userDetail.getName() : getName());
-        user.setPassword(exitAccess() ? userDetail.getPassword() : getPassword());
-        user.setEmail(exitAccess() ? userDetail.getEmail() : getEmail());
+        user.setId(id);
+        user.setName(exitAccess() ? existingUser.getName() : getName());
+        user.setPassword(exitAccess() ? existingUser.getPassword() : getPassword());
+        user.setEmail(exitAccess() ? existingUser.getEmail() : getEmail());
+        user.setMobileNumber(exitAccess() ? existingUser.getMobileNumber() : getMobileNumber());
 
         USER_CONTROLLER.updateUser(user);
         System.out.println("User Account Updated Successfully");
@@ -360,7 +368,7 @@ public class UserView {
      * @return Represents {@link User} information.
      */
     public User getUserById(final Long id) {
-        return USER_CONTROLLER.getUserById(id);
+        return USER_CONTROLLER.getUser(id);
     }
 
     /**

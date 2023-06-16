@@ -127,15 +127,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updateUser(final User user) {
-        for (final User existingUser : USERS.values()) {
-
-            if (existingUser.getId().equals(user.getId())) {
-                existingUser.setName(user.getName());
-                existingUser.setPassword(user.getPassword());
-                existingUser.setEmail(user.getEmail());
-                break;
-            }
-        }
+        USERS.put(user.getId(), user);
     }
 
     /**
@@ -153,17 +145,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param id Represents user id.
-     * @return Users details.
-     */
-    @Override
-    public User getUserById(final Long id) {
-        return USERS.containsKey(id) ? USERS.get(id) : null;
     }
 
     /**

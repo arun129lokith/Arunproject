@@ -109,18 +109,6 @@ public class UserController {
 
     /**
      * <p>
-     * Gets the user detail by the id of the user.
-     * </p>
-     *
-     * @param id Represents user id.
-     * @return The information of the user.
-     */
-    public User getUserById(final Long id) {
-        return USER_SERVICE.getUserById(id);
-    }
-
-    /**
-     * <p>
      * Gets the user id of the user.
      * </p>
      *
