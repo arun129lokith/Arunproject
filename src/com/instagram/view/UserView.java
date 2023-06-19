@@ -79,7 +79,7 @@ public class UserView {
      */
     private String getName() {
         System.out.println(String.join("\n", "Enter Your UserName:",
-                "[Username Contains Lowercase Letter And Underscore And Digits]",
+                "[Username Contains Lowercase Letter And Underscore And Digits Without Space]",
                 "If You Want To Exit Press '!'"));
         final String name = SCANNER.nextLine().trim();
 
@@ -115,9 +115,9 @@ public class UserView {
      */
     private String getEmail() {
         System.out.println(String.join(" ", "Enter Your EmailId:",
-                "\n[EmailId Must Contain Lowercase Letter[a-z] Then Contain Digits[0-9]",
-                "'@' After Must Contains [5-10] Lowercase Letter With Digits And '.' 2 Or 3 Characters]",
-                "\nIF You Want To Exit Press '!'"));
+                "\n[EmailId Must Contains Lowercase Letter[a-z] Then Contain Digits[0-9] Is Optional One",
+                "'@' After Must Contains [5 Or Above] Lowercase Letter And '.' After Must Contains 2 Or 3 ",
+                "Characters]\nIF You Want To Exit Press '!'"));
         final String email = SCANNER.nextLine().trim();
 
         exitMenu(email);
@@ -152,7 +152,7 @@ public class UserView {
      */
     private String getPassword() {
         System.out.println(String.join(" ", "Enter Your Password:", "\n[Password Must Contain At least",
-                "One Uppercase, Special Character And Digits In The Range 8-20 Characters]",
+                "One Uppercase, One Lowercase, Special Character And Digits In The Range 8-20 Characters]",
                 "\nIF You Want To Exit Press '!'"));
         final String password = SCANNER.nextLine().trim();
 
@@ -208,7 +208,7 @@ public class UserView {
 
         try {
             return Integer.parseInt(SCANNER.nextLine());
-        } catch (NumberFormatException message) {
+        } catch (final NumberFormatException message) {
             System.out.println("Invalid Choice. Please Enter An Integer");
         }
 
@@ -222,11 +222,11 @@ public class UserView {
      *
      * @return Represents {@link User} information.
      */
-    public User getUser() {
+    private User getUser() {
         System.out.println("Enter Your UserId:");
-        final User user = USER_CONTROLLER.getUser(Long.parseLong(SCANNER.nextLine()));
+        final User user = USER_CONTROLLER.getUser(getUserId());
 
-        System.out.println(user);
+        System.out.println(null != user ? user : "User Not Found");
 
         return user;
     }
@@ -292,19 +292,19 @@ public class UserView {
                 getAllUsers();
                 break;
             case 5:
-                updateUserDetails(id);
+                update(id);
                 break;
             case 6:
-                deleteUserAccount();
+                delete();
                 break;
             case 7:
                 menu();
                 break;
             case 8:
-                displayUserPost(id);
+                displayPost();
                 break;
             default:
-                System.out.println("Invalid User Choice. Please Try Again\n[Enter The Choice In The Range 1-7]");
+                System.out.println("Invalid User Choice. Please Try Again\n[Enter The Choice In The Range 1-8]");
                 userScreen(id);
         }
         userScreen(id);
@@ -315,10 +315,9 @@ public class UserView {
      * Displays the collection of user post.
      * </p>
      */
-    private void displayUserPost(final Long id) {
+    private void displayPost() {
         System.out.println("Enter The User Id To Get Collection Of Post:");
-        final Long userId = Long.parseLong(SCANNER.nextLine());
-        final User user = getUserById(id);
+        final User user = getUserById(getUserId());
 
         if (null != user) {
 
@@ -326,7 +325,7 @@ public class UserView {
 
                 for (final Post post : user.getPosts()) {
 
-                    if (post.getUserId().equals(userId)) {
+                    if (post.getUserId().equals(user.getId())) {
                         System.out.println(post);
                     }
                 }
@@ -340,23 +339,41 @@ public class UserView {
 
     /**
      * <p>
+     * Gets the valid user id.
+     * </p>
+     *
+     * @return The user id.
+     */
+    private long getUserId() {
+        try {
+            return Long.parseLong(SCANNER.nextLine());
+        } catch (final NumberFormatException message) {
+            System.out.println("Invalid User Id Format. Please Enter A Number");
+        }
+
+        return getUserId();
+    }
+
+    /**
+     * <p>
      * Users to enter update details of the user information.
      * </p>
      *
      * @param id Represents user id.
      */
-    private void updateUserDetails(final Long id) {
+    private void update(final Long id) {
         final User user = new User();
         final User existingUser = getUserById(id);
 
+        System.out.println(existingUser);
         user.setId(id);
-        user.setName(exitAccess() ? existingUser.getName() : getName());
+        user.setName(exitAccess() ? existingUser.getName() : getValidName(getName()));
         user.setPassword(exitAccess() ? existingUser.getPassword() : getPassword());
-        user.setEmail(exitAccess() ? existingUser.getEmail() : getEmail());
-        user.setMobileNumber(exitAccess() ? existingUser.getMobileNumber() : getMobileNumber());
+        user.setEmail(exitAccess() ? existingUser.getEmail() : getValidEmail(getEmail()));
+        user.setMobileNumber(exitAccess() ? existingUser.getMobileNumber() : getValidMobileNumber(getMobileNumber()));
 
-        USER_CONTROLLER.updateUser(user);
-        System.out.println("User Account Updated Successfully");
+        USER_CONTROLLER.update(user);
+        System.out.println("Account Updated Successfully");
     }
 
     /**
@@ -376,9 +393,9 @@ public class UserView {
      * Users to delete his account.
      * </p>
      */
-    private void deleteUserAccount() {
+    private void delete() {
         System.out.println("Enter Your User Id:");
-        if (USER_CONTROLLER.deleteUserAccount(Long.parseLong(SCANNER.nextLine()))) {
+        if (USER_CONTROLLER.delete(getUserId())) {
             System.out.println("User Account Deleted Successfully");
             menu();
         } else {
@@ -415,7 +432,6 @@ public class UserView {
 
         if (USER_CONTROLLER.signIn(user)) {
             System.out.println("Sign in successfully");
-            System.out.println(USER_CONTROLLER.getId(user));
             userScreen(USER_CONTROLLER.getId(user));
         } else {
             System.out.println("User Not Found. Please Try Again");
@@ -468,8 +484,8 @@ public class UserView {
      * @return True if exit the process, false otherwise.
      */
     public boolean exitAccess() {
-        System.out.println(String.join(" ","Do You Want To Continue The Process Press 'Any Word'",
-                "Else Press 'No' For Exit The Process\nEnter Your Message For Continue Or Exit:"));
+        System.out.println(String.join(" ","Do You Want To Continue The Process Press 'Any Key Or",
+                "Word' Else Press 'N Key Or No Word' For Exit The Process\nEnter Your Message For Continue Or Exit:"));
 
         return USER_VALIDATION.isExit(SCANNER.nextLine());
     }

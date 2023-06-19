@@ -52,7 +52,7 @@ public class PostServiceImpl implements PostService {
         final User user = userView.getUserById(post.getUserId()) ;
 
         post.setId(++id);
-        List<Post> posts = user.getPosts();
+        final List<Post> posts = user.getPosts();
 
         posts.add(post);
         user.setPosts(posts);
@@ -97,7 +97,17 @@ public class PostServiceImpl implements PostService {
     public boolean delete(final Long id) {
         final Post post = getPost(id);
 
-        return POSTS.contains(post) && POSTS.remove(post);
+        if (POSTS.contains(post)) {
+            final UserView userView = UserView.getInstance();
+            final User user = userView.getUserById(post.getUserId()) ;
+            final List<Post> posts = user.getPosts();
+
+            posts.remove(post);
+
+            return POSTS.remove(post);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -111,6 +121,11 @@ public class PostServiceImpl implements PostService {
         for (int index = 0; index < POSTS.size(); index++) {
 
             if (POSTS.get(index).getId().equals(updatedPost.getId())) {
+                final UserView userView = UserView.getInstance();
+                final User user = userView.getUserById(updatedPost.getUserId()) ;
+                final List<Post> posts = user.getPosts();
+
+                posts.set(index, updatedPost);
                 POSTS.set(index, updatedPost);
 
                 break;

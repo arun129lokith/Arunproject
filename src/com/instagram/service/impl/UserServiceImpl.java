@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
      * @param user Represents {@link User} details.
      */
     @Override
-    public void updateUser(final User user) {
+    public void update(final User user) {
         USERS.put(user.getId(), user);
     }
 
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
      * @return True if account is deleted, false otherwise.
      */
     @Override
-    public boolean deleteUserAccount(final Long id) {
+    public boolean delete(final Long id) {
         if (USERS.containsKey(id)) {
             USERS.remove(id);
 

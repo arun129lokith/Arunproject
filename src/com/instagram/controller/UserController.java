@@ -91,8 +91,8 @@ public class UserController {
      * @param user Represent {@link User} details.
      * @return True if user details is update, false otherwise
      */
-    public void updateUser(final User user) {
-        USER_SERVICE.updateUser(user);
+    public void update(final User user) {
+        USER_SERVICE.update(user);
     }
 
     /**
@@ -103,8 +103,8 @@ public class UserController {
      * @param id Represents user id.
      * @return True if account is deleted, false otherwise.
      */
-    public boolean deleteUserAccount(final Long id) {
-        return USER_SERVICE.deleteUserAccount(id);
+    public boolean delete(final Long id) {
+        return USER_SERVICE.delete(id);
     }
 
     /**

@@ -51,8 +51,8 @@ public class PostView {
      */
     public void menu(final Long userId) {
         System.out.println(String.join(" ","Click 1 To Create Post\nClick 2 To Display All Post",
-                "\nClick 3 To Delete Post\nClick 4 To Update Post\nClick 5 To Display Single Post\nClick 6 To User",
-                "Screen\nEnter Your Message:"));
+                "\nClick 3 To Delete Post\nClick 4 To Update Post\nClick 5 To Display Post By Id\nClick 6 To User",
+                "Screen"));
 
         if ((USER_VIEW.exitAccess())) {
             USER_VIEW.userScreen(userId);
@@ -142,12 +142,11 @@ public class PostView {
     private Format getFormat() {
         System.out.println("Click 1 To Image Format\nClick 2 To Video Format");
         final Format format = Format.findFormat(USER_VIEW.getChoice());
-        System.out.println(format);
 
         if (null != format) {
             return format;
         } else {
-            System.out.println("Invalid Post Format Choice. Please Enter Valid Choice For Post Format");
+            System.out.println("Invalid Post Format Choice. Please Enter The Choice For Post Format In The Range[1-2]");
 
             return getFormat();
         }
@@ -169,9 +168,9 @@ public class PostView {
      *
      * @return Represents {@link Post} user post.
      */
-    public Post getPost() {
+    private Post getPost() {
         System.out.println("Enter Your PostId:");
-        final Post post = POST_CONTROLLER.getPost(Long.parseLong(SCANNER.nextLine()));
+        final Post post = POST_CONTROLLER.getPost(getPostId());
 
         System.out.println(null != post ? post : "Post Not Found");
 
@@ -185,7 +184,7 @@ public class PostView {
      */
     public void delete() {
         System.out.println("Enter Your PostId:");
-        System.out.println(POST_CONTROLLER.delete(Long.parseLong(SCANNER.nextLine())) ? "Post Deleted Successfully"
+        System.out.println(POST_CONTROLLER.delete(getPostId()) ? "Post Deleted Successfully"
                 : "Post Not Found");
     }
 
@@ -201,15 +200,34 @@ public class PostView {
 
         if (null != existingPost) {
             post.setId(existingPost.getId());
+            post.setUserId(existingPost.getUserId());
+            post.setFormat(existingPost.getFormat());
             post.setLocation(USER_VIEW.exitAccess() ? existingPost.getLocation() : getLocation());
             post.setCaption(USER_VIEW.exitAccess() ? existingPost.getCaption() : getCaption());
             post.setUploadTime(Timestamp.from(Instant.now()));
 
             POST_CONTROLLER.update(post);
-            System.out.println("User Post Updated Successfully");
+            System.out.println("Post Updated Successfully");
         } else {
             System.out.println("Post Not Found. Please Try Again");
         }
+    }
+
+    /**
+     * <p>
+     * Gets valid post id of the user.
+     * </p>
+     *
+     * @return The post id of the user.
+     */
+    private long getPostId() {
+        try {
+            return Long.parseLong(SCANNER.nextLine());
+        } catch (final NumberFormatException message) {
+            System.out.println("Invalid Post Id Format. Please Enter A Number");
+        }
+
+        return getPostId();
     }
 }
 

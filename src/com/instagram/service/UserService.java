@@ -60,7 +60,7 @@ public interface UserService {
      *
      * @param user Represents {@link User} details.
      */
-    void updateUser(final User user);
+    void update(final User user);
 
     /**
      * <p>
@@ -70,7 +70,7 @@ public interface UserService {
      * @param id Represents user id.
      * @return True if account is deleted, false otherwise.
      */
-    boolean deleteUserAccount(final Long id);
+    boolean delete(final Long id);
 
     /**
      * <p>

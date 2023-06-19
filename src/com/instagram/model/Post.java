@@ -22,7 +22,7 @@ public class Post {
     public enum Format {
 
         IMAGE(1), VIDEO(2);
-        private int choice;
+        private final int choice;
 
         Format(final int choice) {
             this.choice = choice;
@@ -89,7 +89,7 @@ public class Post {
     }
 
     public String toString() {
-        return String.format("Id = %d\nCaption = %s\nLocation = %s\nTime And Date = %s\nUser Id = %d\nFormat = %s",
+        return String.format("Id = %d\nCaption = %s\nLocation = %s\nTime And Date = %s\nUser Id = %d\nFormat = %s\n",
                               id, caption, location, uploadTime, userId, format);
     }
 }
